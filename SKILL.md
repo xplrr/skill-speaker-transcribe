@@ -69,15 +69,17 @@ Returns JSON with fields:
 ### setup — Configure the environment
 
 ```sh
-<skill-dir>/scripts/ensure-speaker-transcribe.sh setup [--storage-profile <profile>] [--hf-token <token>] [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh setup [--profile <profile>] [--hf-token <token>] [--storage-profile <profile>] [--app-root <path>] [--json]
 ```
 
 `setup` saves configuration, creates storage directories, records the HF token when provided, and reports readiness. It does not download all model assets. Use `models download --recommended --json` after setup.
 
 | Flag | Purpose |
 |------|---------|
+| `--profile` | Setup profile to persist for later readiness/model workflows |
 | `--storage-profile` | `user` (shared) or `repo-local` (per-project) |
 | `--hf-token` | Provide HF token non-interactively |
+| `--app-root` | Override the resolved application storage root |
 | `--json` | Machine-readable output |
 
 ### resume — Continue a partial run
