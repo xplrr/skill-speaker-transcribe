@@ -85,10 +85,10 @@ Returns JSON with fields:
 ### resume — Continue a partial run
 
 ```sh
-<skill-dir>/scripts/ensure-speaker-transcribe.sh resume <run-dir> [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh resume <artifact> [--json]
 ```
 
-Use when a prior `run` completed as partial (e.g. missing HF token prevented speaker attribution). Fix the prerequisite first (e.g. run `setup`), then resume.
+Use when a prior `run` completed as partial (e.g. missing HF token prevented speaker attribution). Pass the run directory or any saved artifact inside it after fixing the prerequisite (for example with `setup`).
 
 ### diarize — Add speakers to existing transcript
 
