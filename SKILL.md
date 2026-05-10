@@ -29,7 +29,7 @@ Bootstraps and invokes the `speaker-transcribe` CLI for speaker-attributed trans
 ### run — Transcribe a source
 
 ```sh
-scripts/ensure-speaker-transcribe.sh run "<source>" [--start HH:MM:SS] [--stop HH:MM:SS] [--transcript-backend <backend>] [--model <tier>] [--device <device>] [--run-root <path>] [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh run "<source>" [--start MM:SS] [--stop MM:SS] [--transcript-backend <backend>] [--model <tier>] [--device <device>] [--run-root <path>] [--json]
 ```
 
 | Flag | Values | Purpose |
@@ -37,7 +37,7 @@ scripts/ensure-speaker-transcribe.sh run "<source>" [--start HH:MM:SS] [--stop H
 | `--transcript-backend` | `auto`, `whisper_fallback`, `openvino_whisper` | Force a specific transcription backend |
 | `--model` | `large`, `turbo` | Model tier (large = highest quality, turbo = fastest) |
 | `--device` | `auto`, `cpu`, `gpu`, `npu` | Target inference device |
-| `--start` | Time offset (e.g. `00:15`, `1:30:00`) | Clip start |
+| `--start` | Time offset (e.g. `00:15`, `90:00`) | Clip start |
 | `--stop` | Time offset | Clip end |
 | `--run-root` | Directory path | Custom output directory root |
 | `--json` | — | Machine-readable JSON progress output |
@@ -72,7 +72,7 @@ Returns JSON with fields:
 scripts/ensure-speaker-transcribe.sh setup [--storage-profile <profile>] [--hf-token <token>] [--json]
 ```
 
-Interactive when run without flags. Downloads required models and configures HF token.
+`setup` saves configuration, creates storage directories, records the HF token when provided, and reports readiness. It does not download all model assets. Use `models download --recommended --json` after setup.
 
 | Flag | Purpose |
 |------|---------|
@@ -91,21 +91,22 @@ Use when a prior `run` completed as partial (e.g. missing HF token prevented spe
 ### diarize — Add speakers to existing transcript
 
 ```sh
-scripts/ensure-speaker-transcribe.sh diarize <run-dir> [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh diarize <source-audio> --transcript <transcript-json> [--expected-speakers n] [--json]
 ```
 
-Runs speaker attribution on an existing partial run that has transcript segments but no speaker labels.
+Use this when the run already has transcript segments and you need to run speaker attribution against the source audio.
 
 ### models — Manage models
 
 ```sh
 scripts/ensure-speaker-transcribe.sh models list [--json]
-scripts/ensure-speaker-transcribe.sh models download <model-name>
-scripts/ensure-speaker-transcribe.sh models verify
+scripts/ensure-speaker-transcribe.sh models download --recommended --json
+scripts/ensure-speaker-transcribe.sh models download <logical-name> --json
+scripts/ensure-speaker-transcribe.sh models verify --json
 scripts/ensure-speaker-transcribe.sh models path
 ```
 
-Model names: `openvino-whisper-large-v3`, `openvino-whisper-turbo`, `whisper-large-v3`, `whisper-turbo`, `pyannote-speaker-diarization-3.1`
+Logical model names include `openvino-whisper-large-v3`, `openvino-whisper-medium`, `openvino-whisper-turbo`, `whisper-large-v3`, `whisper-turbo`, and `pyannote-speaker-diarization-3.1`.
 
 ### storage — Manage storage profile
 
@@ -146,6 +147,7 @@ A completed run creates a directory with ordered files:
 |------|---------|
 | `01_run-metadata.json` | Source info, timestamps, settings used |
 | `02_transcript-segments.json` | Raw transcript segments with timestamps |
+| `03_source-audio.*` | Saved local audio artifact for resume/backend work when available |
 | `04_transcript-document.json` | Canonical document with speaker labels |
 | `05_transcript-markdown.md` | Human-readable speaker-attributed transcript |
 | `06_run-manifest.json` | Final status, paths to all artifacts |
