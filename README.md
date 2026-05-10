@@ -12,7 +12,7 @@ Register this skill with your agent framework:
 
 ## How it works
 
-The launcher scripts (`scripts/ensure-speaker-transcribe.sh` on Unix, `scripts\ensure-speaker-transcribe.ps1` on Windows) check for an existing `speaker-transcribe` install, bootstrap it via `uv` or `pipx` if missing, then forward all CLI arguments. No manual install steps are needed — agents just call the launcher.
+The launcher scripts (`<skill-dir>/scripts/ensure-speaker-transcribe.sh` on Unix, `<skill-dir>\scripts\ensure-speaker-transcribe.ps1` on Windows) check for an existing `speaker-transcribe` install, bootstrap it via `uv` or `pipx` if missing, then forward all CLI arguments. No manual install steps are needed — agents just call the launcher.
 
 See `SKILL.md` for the current command reference, including the `run`, `setup`, `diarize`, and `models download` forms that match the live CLI parser.
 

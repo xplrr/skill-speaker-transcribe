@@ -19,8 +19,8 @@ Bootstraps and invokes the `speaker-transcribe` CLI for speaker-attributed trans
 ## Operational rules
 
 1. Always use the launcher script — do not run pip/uv/pipx directly
-2. On Unix: `scripts/ensure-speaker-transcribe.sh <args>`
-3. On Windows: `scripts\ensure-speaker-transcribe.ps1 <args>`
+2. On Unix: `<skill-dir>/scripts/ensure-speaker-transcribe.sh <args>`
+3. On Windows: `<skill-dir>\scripts\ensure-speaker-transcribe.ps1 <args>`
 4. If the user has `SPEAKER_TRANSCRIBE_DEV_ROOT` set, the launcher uses that checkout directly
 5. Always pass `--json` for machine-readable output when parsing results programmatically
 
@@ -44,18 +44,18 @@ Bootstraps and invokes the `speaker-transcribe` CLI for speaker-attributed trans
 
 Example — transcribe YouTube clip with GPU acceleration:
 ```sh
-scripts/ensure-speaker-transcribe.sh run "https://youtube.com/watch?v=abc" --start 00:15 --stop 01:00 --device gpu --json
+<skill-dir>/scripts/ensure-speaker-transcribe.sh run "https://youtube.com/watch?v=abc" --start 00:15 --stop 01:00 --device gpu --json
 ```
 
 Example — transcribe local file with CPU fallback:
 ```sh
-scripts/ensure-speaker-transcribe.sh run recording.wav --transcript-backend whisper_fallback --json
+<skill-dir>/scripts/ensure-speaker-transcribe.sh run recording.wav --transcript-backend whisper_fallback --json
 ```
 
 ### check — Diagnose environment
 
 ```sh
-scripts/ensure-speaker-transcribe.sh check --json
+<skill-dir>/scripts/ensure-speaker-transcribe.sh check --json
 ```
 
 Returns JSON with fields:
@@ -69,7 +69,7 @@ Returns JSON with fields:
 ### setup — Configure the environment
 
 ```sh
-scripts/ensure-speaker-transcribe.sh setup [--storage-profile <profile>] [--hf-token <token>] [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh setup [--storage-profile <profile>] [--hf-token <token>] [--json]
 ```
 
 `setup` saves configuration, creates storage directories, records the HF token when provided, and reports readiness. It does not download all model assets. Use `models download --recommended --json` after setup.
@@ -83,7 +83,7 @@ scripts/ensure-speaker-transcribe.sh setup [--storage-profile <profile>] [--hf-t
 ### resume — Continue a partial run
 
 ```sh
-scripts/ensure-speaker-transcribe.sh resume <run-dir> [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh resume <run-dir> [--json]
 ```
 
 Use when a prior `run` completed as partial (e.g. missing HF token prevented speaker attribution). Fix the prerequisite first (e.g. run `setup`), then resume.
@@ -99,11 +99,11 @@ Use this when the run already has transcript segments and you need to run speake
 ### models — Manage models
 
 ```sh
-scripts/ensure-speaker-transcribe.sh models list [--json]
-scripts/ensure-speaker-transcribe.sh models download --recommended --json
-scripts/ensure-speaker-transcribe.sh models download <logical-name> --json
-scripts/ensure-speaker-transcribe.sh models verify --json
-scripts/ensure-speaker-transcribe.sh models path
+<skill-dir>/scripts/ensure-speaker-transcribe.sh models list [--json]
+<skill-dir>/scripts/ensure-speaker-transcribe.sh models download --recommended --json
+<skill-dir>/scripts/ensure-speaker-transcribe.sh models download <logical-name> --json
+<skill-dir>/scripts/ensure-speaker-transcribe.sh models verify --json
+<skill-dir>/scripts/ensure-speaker-transcribe.sh models path
 ```
 
 Logical model names include `openvino-whisper-large-v3`, `openvino-whisper-medium`, `openvino-whisper-turbo`, `whisper-large-v3`, `whisper-turbo`, and `pyannote-speaker-diarization-3.1`.
@@ -111,8 +111,8 @@ Logical model names include `openvino-whisper-large-v3`, `openvino-whisper-mediu
 ### storage — Manage storage profile
 
 ```sh
-scripts/ensure-speaker-transcribe.sh storage show
-scripts/ensure-speaker-transcribe.sh storage use <profile>
+<skill-dir>/scripts/ensure-speaker-transcribe.sh storage show
+<skill-dir>/scripts/ensure-speaker-transcribe.sh storage use <profile>
 ```
 
 Profiles: `user` (OS app data dir, shared) or `repo-local` (`.speaker-transcribe/` in git root, isolated).
@@ -120,9 +120,9 @@ Profiles: `user` (OS app data dir, shared) or `repo-local` (`.speaker-transcribe
 ### config — View/edit configuration
 
 ```sh
-scripts/ensure-speaker-transcribe.sh config get <key>
-scripts/ensure-speaker-transcribe.sh config set <key> <value>
-scripts/ensure-speaker-transcribe.sh config path
+<skill-dir>/scripts/ensure-speaker-transcribe.sh config get <key>
+<skill-dir>/scripts/ensure-speaker-transcribe.sh config set <key> <value>
+<skill-dir>/scripts/ensure-speaker-transcribe.sh config path
 ```
 
 Keys: `storage_profile`, `default_device`, `hf_token`, `models_dir`
@@ -136,8 +136,8 @@ If `check --json` shows `diarization.ready: false` with reason `hf_token_missing
    - https://huggingface.co/pyannote/speaker-diarization-3.1
    - https://huggingface.co/pyannote/segmentation-3.0
 3. Direct them to create a token: https://huggingface.co/settings/tokens (read access sufficient)
-4. Run: `scripts/ensure-speaker-transcribe.sh setup --hf-token <their-token> --json`
-5. Verify with: `scripts/ensure-speaker-transcribe.sh check --json` — `diarization.ready` should be `true`
+4. Run: `<skill-dir>/scripts/ensure-speaker-transcribe.sh setup --hf-token <their-token> --json`
+5. Verify with: `<skill-dir>/scripts/ensure-speaker-transcribe.sh check --json` — `diarization.ready` should be `true`
 
 ## Output artifacts
 
