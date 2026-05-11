@@ -2,6 +2,9 @@
 
 A companion skill that helps AI coding agents use the [`speaker-transcribe`](https://github.com/xplrr/speaker-transcribe) CLI for speaker-attributed transcription.
 
+- Skill repository: https://github.com/xplrr/skill-speaker-transcribe
+- Tool repository: https://github.com/xplrr/speaker-transcribe
+
 ## Installation
 
 Register this skill with your agent framework:
@@ -13,6 +16,16 @@ Register this skill with your agent framework:
 ## How it works
 
 The launcher scripts (`<skill-dir>/scripts/ensure-speaker-transcribe.sh` on Unix, `<skill-dir>\scripts\ensure-speaker-transcribe.ps1` on Windows) check for an existing `speaker-transcribe` install, bootstrap it via `uv` or `pipx` if missing, then forward all CLI arguments. No manual install steps are needed — agents just call the launcher.
+
+If `SPEAKER_TRANSCRIBE_DEV_ROOT` is set, it must point to a source checkout with a ready virtual environment:
+
+```bash
+cd "$SPEAKER_TRANSCRIBE_DEV_ROOT" && uv sync --extra dev --extra full
+```
+
+An invalid dev override now fails fast with setup instructions instead of silently falling back to auto-install.
+
+If bootstrap succeeds but the executable is still missing from `PATH`, the launchers now stop with remediation hints (`uv tool dir --bin` for `uv`, `pipx ensurepath` for `pipx`) instead of failing with a less clear command-not-found error.
 
 See `SKILL.md` for the current command reference, including the `run`, `setup`, `diarize`, and `models download` forms that match the live CLI parser.
 
@@ -32,8 +45,8 @@ $env:SPEAKER_TRANSCRIBE_DEV_ROOT = "$env:USERPROFILE\Projects\speaker-transcribe
 
 - Python 3.10+
 - `uv` (preferred) or `pipx`
-- `ffmpeg` (OS-level install)
+- `ffmpeg` and `ffprobe` (OS-level install)
 
 ## License
 
-MIT
+MIT. See [`LICENSE`](LICENSE).

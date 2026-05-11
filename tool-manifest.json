@@ -2,7 +2,8 @@
   "name": "speaker-transcribe",
   "description": "Speaker-attributed transcription from local media files or YouTube URLs",
   "version": "0.1.0",
-  "repository": "https://github.com/xplrr/speaker-transcribe",
+  "skill_repository": "https://github.com/xplrr/skill-speaker-transcribe",
+  "tool_repository": "https://github.com/xplrr/speaker-transcribe",
   "launchers": {
     "unix": "scripts/ensure-speaker-transcribe.sh",
     "windows": "scripts/ensure-speaker-transcribe.ps1"
@@ -17,6 +18,6 @@
   },
   "prerequisites": [
     "python>=3.10",
-    "ffmpeg (OS-level)"
+    "ffmpeg and ffprobe (OS-level)"
   ]
 }

@@ -7,6 +7,9 @@ description: Use when the user wants speaker-attributed transcription from a loc
 
 Bootstraps and invokes the `speaker-transcribe` CLI for speaker-attributed transcription. The launcher scripts auto-install the tool if missing, then forward all arguments.
 
+- Skill repository: https://github.com/xplrr/skill-speaker-transcribe
+- Tool repository: https://github.com/xplrr/speaker-transcribe
+
 ## When to use
 
 - User wants to transcribe audio/video with speaker attribution
@@ -21,8 +24,9 @@ Bootstraps and invokes the `speaker-transcribe` CLI for speaker-attributed trans
 1. Always use the launcher script — do not run pip/uv/pipx directly
 2. On Unix: `<skill-dir>/scripts/ensure-speaker-transcribe.sh <args>`
 3. On Windows: `<skill-dir>\scripts\ensure-speaker-transcribe.ps1 <args>`
-4. If the user has `SPEAKER_TRANSCRIBE_DEV_ROOT` set, the launcher uses that checkout directly
-5. Always pass `--json` for machine-readable output when parsing results programmatically
+4. If the user has `SPEAKER_TRANSCRIBE_DEV_ROOT` set, it must point to a checkout with `.venv` created via `uv sync --extra dev --extra full`; invalid overrides are a hard error
+5. If bootstrap succeeds but `speaker-transcribe` is still not on `PATH`, follow the launcher hint (`uv tool dir --bin` or `pipx ensurepath`) instead of retrying blindly
+6. Always pass `--json` for machine-readable output when parsing results programmatically
 
 ## Commands reference
 
